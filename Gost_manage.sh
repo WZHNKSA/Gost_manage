@@ -41,10 +41,10 @@ install_gost() {
     arch=$(uname -m)
     if [[ "$arch" == "x86_64" ]]; then
         gost_pkg="gost_linux_amd64.tar.gz"
-        download_url="https://pan.529808.xyz/index.php?explorer/share/file&hash=7fa6a6TjMVXNWntMeDaZvTbT8y-ka3yJ80GehLxXHfsr1RzBEnPGcaFKINO2Svp474OE"
+        download_url="https://pan.529808.xyz/index.php?explorer/share/file&hash=b26agum5EQjlpBJ8UMJM2PcvKFapy7Aj80k04lyejhE2EQwTAdWCuutfRDedjOuM62Tf"
     elif [[ "$arch" == "aarch64" ]] || [[ "$arch" == "arm64" ]]; then
         gost_pkg="gost_linux_arm64.tar.gz"
-        download_url="https://pan.529808.xyz/index.php?explorer/share/file&hash=25b35u8d0XOYO-AvcdrZWQ0sgGd4xOSb0EE61a2lUjtSipqIr4fXFxqIjRx6zjH3YIOF"
+        download_url="https://pan.529808.xyz/index.php?explorer/share/file&hash=4c5b3BeiO_LAVTCl01U4e_8Wsowx4JNMR-OVGcMJIM3T7WurEl8fobk883_rBO6pz1G1"
     else
         echo "暂不支持的系统架构: $arch"
         return 1
@@ -64,13 +64,14 @@ install_gost() {
         return 1
     fi
 
-    gost_bin=$(find "$GOST_DIR" -type f -name 'gost*' | head -n 1)
+    # 查找 gost 可执行文件并移动到 $GOST_BIN
+    gost_bin=$(find "$GOST_DIR" -maxdepth 1 -type f -name 'gost*' -perm /u+x | head -n 1)
     if [ -z "$gost_bin" ]; then
         echo "未找到 gost 可执行文件！"
         return 1
     fi
-    chmod +x "$gost_bin"
-    ln -sf "$gost_bin" "$GOST_BIN"
+    mv -f "$gost_bin" "$GOST_BIN"
+    chmod +x "$GOST_BIN"
 
     rm -f "$GOST_DIR/$gost_pkg"
     echo "安装完成！Gost 路径: $GOST_BIN"
